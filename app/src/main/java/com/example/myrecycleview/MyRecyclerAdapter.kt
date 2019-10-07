@@ -5,9 +5,8 @@ import androidx.recyclerview.widget.RecyclerView
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import kotlinx.android.synthetic.main.item_person.view.*
-
-//import kotlinx.android.synthetic.main.dog_item.view.*
 
 
 class MyRecyclerAdapter(private val data: ArrayList<Person>) :

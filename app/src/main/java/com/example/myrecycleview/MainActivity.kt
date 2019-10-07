@@ -4,6 +4,8 @@ import android.os.Bundle
 //import android.support.constraint.ConstraintLayout
 
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.Toast
@@ -13,7 +15,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.bottom_sheet.*
-//import kotlinx.android.synthetic.main.bottom_sheet.button
 import kotlinx.android.synthetic.main.main_content.*
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
@@ -50,16 +51,16 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             adapter = MyRecyclerAdapter(persons)
         }
         //вызов функции,которая собирает футор - в разработке
-        initView()
+        initBottomSheet()
     }
 
-    private fun initView() {
+    private fun initBottomSheet() {
         //Устанавливаем листенер (обработчик событий) на кнопку
         buttonMain.setOnClickListener(this)
 
         //подключаем дейстия на BottomSheet
         bottomSheetBehavior = BottomSheetBehavior.from<LinearLayout>(bottom_sheet)
-
+        bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
         //управление поведением BottomSheet
         bottomSheetBehavior.setBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
             override fun onSlide(bottomSheet: View, slideOffset: Float) {
@@ -70,13 +71,16 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             override fun onStateChanged(bottomSheet: View, newState: Int) {
                 when (newState) {
                     BottomSheetBehavior.STATE_COLLAPSED -> {
-                        buttonMain.text = "Slide Up"
+                        buttonMain.visibility = View.VISIBLE
+                        //buttonMain.text = "Slide Up"
                     }
                     BottomSheetBehavior.STATE_HIDDEN -> {
-
+                        buttonMain.visibility = View.VISIBLE
+                        //buttonMain.text = "Slide Down"
                     }
                     BottomSheetBehavior.STATE_EXPANDED -> {
-                        buttonMain.text = "Slide Down"
+                        buttonMain.visibility = View.INVISIBLE
+                        // buttonMain.text = "Slide Down"
                     }
                     BottomSheetBehavior.STATE_DRAGGING -> {
 
@@ -100,16 +104,38 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     private fun slideUpDownBottomSheet() {
         //Проверяем состояние BottomSheet
-        if (bottomSheetBehavior.state != BottomSheetBehavior.STATE_EXPANDED) {
+        if (bottomSheetBehavior.state == BottomSheetBehavior.STATE_HIDDEN) {
             //Если BottomSheet не открыт, открываем его
-            bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+            bottomSheetBehavior.peekHeight = 600
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
             buttonMain.text = "Slide Down"
         } else {
             //Сворачиваем BottomSheet
-            bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
             buttonMain.text = "Slide Up"
         }
     }
 
+    //Подключение меню
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        val inflater = menuInflater
+        inflater.inflate(R.menu.menu, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+    //Обработка нажатий элементов меню
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when (item?.itemId){
+            R.id.action_kovrov ->{
+                Toast.makeText(this, "Open Kovrov", Toast.LENGTH_SHORT).show()
+                return true
+            }
+            R.id.action_ulsk ->{
+                Toast.makeText(this, "Open Ulyanovsk", Toast.LENGTH_SHORT).show()
+                return true
+            }
+            null -> return false
+        }
+        return super.onOptionsItemSelected(item)
+    }
 
 }

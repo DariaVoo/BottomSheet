@@ -11,6 +11,4 @@
 
     <include layout="@layout/main_content"/>
 
-
-
 </LinearLayout>
